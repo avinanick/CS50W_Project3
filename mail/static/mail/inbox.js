@@ -23,6 +23,13 @@ function compose_email() {
 }
 
 function load_mailbox(mailbox) {
+
+  // Request the emails from the desired mailbox
+  fetch('/emails/${mailbox}')
+  .then(response => response.json())
+  .then(emails => {
+    console.log(emails)
+  })
   
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
