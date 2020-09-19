@@ -22,6 +22,42 @@ function compose_email() {
   document.querySelector('#compose-body').value = '';
 }
 
+function create_email_list_element(email_json) {
+
+  let display_container = document.createElement('div');
+  let sender = document.createElement('p');
+  let subject = document.createElement('p');
+  let timestamp = document.createElement('p');
+  sender.setAttribute('class', 'email_sender');
+  subject.setAttribute('class', 'email_subject');
+  timestamp.setAttribute('class', 'email_time');
+
+  sender.innerHTML = email_json["sender"];
+  subject.innerHTML = email_json["subject"];
+  timestamp.innerHTML = email_json["timestamp"];
+
+  if (email_json["read"]) {
+
+    display_container.setAttribute('class', 'read-email');
+
+  } else {
+
+    display_container.setAttribute('class', 'unread-email');
+
+  }
+
+  display_container.appendChild(sender);
+  display_container.appendChild(subject);
+  display_container.appendChild(timestamp);
+
+  return display_container;
+
+}
+
+function load_email(email_id) {
+
+}
+
 function load_mailbox(mailbox) {
 
   // Request the emails from the desired mailbox
@@ -29,6 +65,7 @@ function load_mailbox(mailbox) {
   .then(response => response.json())
   .then(emails => {
     console.log(emails)
+    setup_mailbox_display(emails)
   })
   
   // Show the mailbox and hide other views
@@ -37,4 +74,8 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+}
+
+function setup_mailbox_display(email_list) {
+
 }
