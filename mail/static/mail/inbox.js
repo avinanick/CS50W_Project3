@@ -50,6 +50,10 @@ function create_email_list_element(email_json) {
   display_container.appendChild(subject);
   display_container.appendChild(timestamp);
 
+  display_container.addEventListener("click", function() {
+    load_email(email_json["id"]); // I may want to just pass the json
+  });
+
   return display_container;
 
 }
@@ -65,7 +69,13 @@ function load_mailbox(mailbox) {
   .then(response => response.json())
   .then(emails => {
     console.log(emails)
-    setup_mailbox_display(emails)
+
+    const emails_list = document.querySelector('#emails-view');
+    for (let i = 0; i < emails.length; i++) {
+
+      emails_list.appendChild(create_email_list_element(emails[i]));
+
+    }
   })
   
   // Show the mailbox and hide other views
@@ -74,8 +84,4 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
-}
-
-function setup_mailbox_display(email_list) {
-
 }
