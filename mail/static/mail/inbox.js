@@ -164,6 +164,11 @@ function set_archived() {
         archived: (archive_button.innerHTML === "Archive")
     })
   })
-  
+  .then(result => {
+
+    console.log(result);
+    load_mailbox('inbox');
+    
+  })
 
 }
