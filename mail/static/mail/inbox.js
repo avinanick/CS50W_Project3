@@ -62,10 +62,30 @@ function create_email_list_element(email_json) {
 
 function load_email(email_id) {
 
+  fetch('/emails/' + email_id)
+  .then(response => response.json())
+  .then(email => {
+
+    document.querySelector('#email-subject').innerHTML = email["subject"];
+    document.querySelector('#email-sender').innerHTML = 'From: ' + email["sender"];
+    document.querySelector('#email-recipients').innerHTML = 'To: ' + email["recipients"];
+    document.querySelector('#email-timestamp').innerHTML = 'Sent: ' + email["timestamp"];
+    document.querySelector('#email-body').innerHTML = email["body"];
+
+  })
+
   // Show email details view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#email-details-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+
+  fetch('/emails/' + email_id, {
+    method: 'PUT',
+    body: JSON.stringify({
+        read: true
+    })
+  })
+  
 
 }
 
