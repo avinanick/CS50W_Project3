@@ -2,13 +2,19 @@ textarea {
     min-height: 400px;
 }
 
+.email_subject, .email_sender, .email_time {
+    margin: 10px;
+}
+
 .read-email, .unread-email {
-    border: thin;
-    display: inline-block;
+    border: medium;
+    border-color: black;
+    display: inline-flex;
+    width: 100%;
 }
 
 .read-email {
-    background-color: gray;
+    background-color: lightgray;
 }
 
 .unread-email {
