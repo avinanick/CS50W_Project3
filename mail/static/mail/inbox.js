@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
   document.querySelector('#compose-form').addEventListener('submit', send_email);
+  document.querySelector('#archive').addEventListener('click', set_archived);
 
   // By default, load the inbox
   load_mailbox('inbox');
@@ -71,6 +72,15 @@ function load_email(email_id) {
     document.querySelector('#email-recipients').innerHTML = 'To: ' + email["recipients"];
     document.querySelector('#email-timestamp').innerHTML = 'Sent: ' + email["timestamp"];
     document.querySelector('#email-body').innerHTML = email["body"];
+
+    // Change the state of the archive button depending on the email status
+    let archive_button = document.querySelector('#archive')
+    archive_button.dataset.emailid = email_id;
+    if (email["archived"]) {
+      archive_button.innerHTML = "Unarchive";
+    } else {
+      archive_button.innerHTML = "Archive";
+    }
 
   })
 
@@ -142,5 +152,18 @@ function send_email(event) {
   load_mailbox('inbox');
   
   return false;
+
+}
+
+function set_archived() {
+
+  let archive_button = document.querySelector('#archive')
+  fetch('/emails/' + archive_button.dataset.emailid, {
+    method: 'PUT',
+    body: JSON.stringify({
+        archived: (archive_button.innerHTML === "Archive")
+    })
+  })
+  
 
 }
