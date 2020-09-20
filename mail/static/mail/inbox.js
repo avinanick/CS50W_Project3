@@ -87,6 +87,33 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 }
 
-function send_email() {
+function send_email(event) {
+
+  console.log('form submission');
+  event.preventDefault();
+
+  // Collect all the email information
+  let email_recipients = document.querySelector('#compose-recipients').value;
+  let email_subject = document.querySelector('#compose-subject').value;
+  let email_body = document.querySelector('#compose-body').value;
+
+  fetch('/emails', {
+    method: 'POST',
+    body: JSON.stringify({
+        recipients: email_recipients,
+        subject: email_subject,
+        body: email_body
+    })
+  })
+  .then(response => response.json())
+  .then(result => {
+      
+      console.log(result);
+      // I should probably try to handle errors here
+  });
+
+  load_mailbox('inbox');
+  
+  return false;
 
 }
