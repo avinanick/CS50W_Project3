@@ -1,3 +1,16 @@
 textarea {
     min-height: 400px;
 }
+
+.read-email, .unread-email {
+    border: thin;
+    display: inline-block;
+}
+
+.read-email {
+    background-color: gray;
+}
+
+.unread-email {
+    background-color: white;
+}
