@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#compose').addEventListener('click', compose_email);
   document.querySelector('#compose-form').addEventListener('submit', send_email);
   document.querySelector('#archive').addEventListener('click', set_archived);
+  document.querySelector('#reply').addEventListener('click', reply);
 
   // By default, load the inbox
   load_mailbox('inbox');
@@ -74,7 +75,7 @@ function load_email(email_id) {
     document.querySelector('#email-body').innerHTML = email["body"];
 
     // Change the state of the archive button depending on the email status
-    let archive_button = document.querySelector('#archive')
+    let archive_button = document.querySelector('#archive');
     archive_button.dataset.emailid = email_id;
     if (email["archived"]) {
       archive_button.innerHTML = "Unarchive";
@@ -124,6 +125,29 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 }
 
+function reply() {
+
+  let email_id = document.querySelector('#archive').dataset.emailid;
+  compose_email();
+
+  fetch('/emails/' + email_id)
+  .then(response => response.json())
+  .then(email => {
+
+    document.querySelector('#compose-recipients').value = email['sender'];
+
+    if(email['subject'].startsWith("Re: ")) {
+      document.querySelector('#compose-subject').value = email['subject'];
+    } else {
+      document.querySelector('#compose-subject').value = "Re: " + email['subject'];
+    }
+
+    document.querySelector('#compose-body').value = 'On ' + email['timestamp'] + " " + email['sender'] + " wrote: " + email['body'];
+
+  })
+
+}
+
 function send_email(event) {
 
   console.log('form submission');
@@ -168,7 +192,7 @@ function set_archived() {
 
     console.log(result);
     load_mailbox('inbox');
-    
+
   })
 
 }
